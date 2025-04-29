@@ -99,7 +99,7 @@ fig, ax = plt.subplots(1)
 
 ax.scatter(T_heating_range, cop)
 ax.set_ylabel("COP of the heat pump")
-ax.set_xlabel("Heating temperatur in °C")
+ax.set_xlabel("Heating temperature in °C")
 
 plt.tight_layout()
 plt.show()
