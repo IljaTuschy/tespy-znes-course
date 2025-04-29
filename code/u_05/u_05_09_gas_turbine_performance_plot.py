@@ -74,7 +74,7 @@ TIT_range = np.linspace(800+273.15, 1200+273.15, n_TIT)
 Pi_range = np.linspace(5, 50, n_Pi)
 
 # prepare plot
-fig = plt.figure()
+fig = plt.figure(figsize=[6,6])
 ax_eta =fig.add_subplot(211)
 ax_wp =fig.add_subplot(212)
 
@@ -95,11 +95,11 @@ for TIT_n in TIT_range:
     i +=1
 
 #format plot and show
-ax_eta.set_title('Gas Turbine Performance for different Turbine Inlet Temperatures')
+fig.suptitle('Gas Turbine Performance for different Turbine Inlet Temperatures')
 ax_eta.set_ylabel('Efficiency')
 ax_wp.set_xlabel('Compressor Presure Ratio')
 ax_wp.set_ylabel('Specific Work in kJ/kg')
-labels = [f'T = {TIT_n} K' for TIT_n in TIT_range]
+labels = [f'T = {TIT_n:.0f} K' for TIT_n in TIT_range]
 ax_eta.legend(labels, loc='lower left', ncols=2)
 ax_eta.grid(True)
 ax_wp.grid(True)

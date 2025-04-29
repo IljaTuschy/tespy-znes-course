@@ -66,8 +66,8 @@ gt.solve(mode='design')
 gt.print_results()
 
 # prepare parameter matrix and result array
-n_TIT = 2
-n_Pi = 5
+n_TIT = 6
+n_Pi = 25
 eta = np.empty([n_TIT, n_Pi])
 wp = np.empty([n_TIT, n_Pi])
 
@@ -104,7 +104,7 @@ ratios = eta_df.columns.to_numpy(dtype=float)
 TITs = eta_df.index.to_numpy()
 
 # prepare plot
-fig = plt.figure()
+fig = plt.figure(figsize=[6,6])
 ax_eta =fig.add_subplot(211)
 ax_wp =fig.add_subplot(212)
 # plot in a loop
@@ -114,11 +114,11 @@ for TIT_n in TITs:
     ax_wp.plot(ratios, data_wp[i])
     i +=1
 
-ax_eta.set_title('Gas Turbine Performance for different Turbine Inlet Temperatures')
+fig.suptitle('Gas Turbine Performance for different Turbine Inlet Temperatures')
 ax_eta.set_ylabel('Efficiency')
 ax_wp.set_xlabel('Compressor Presure Ratio')
 ax_wp.set_ylabel('Specific Work in kJ/kg')
-labels = [f'T = {TIT_n} K' for TIT_n in TITs]
+labels = [f'T={TIT_n:.0f} K' for TIT_n in TITs]
 ax_eta.legend(labels, loc='lower left', ncols=2)
 ax_eta.grid(True)
 ax_wp.grid(True)
