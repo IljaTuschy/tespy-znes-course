@@ -125,3 +125,6 @@ ax_wp.grid(True)
 ax_eta.sharex(ax_wp)
 ax_eta.tick_params(labelbottom=False)
 plt.show()
+
+eta_df.plot()
+plt.show()
