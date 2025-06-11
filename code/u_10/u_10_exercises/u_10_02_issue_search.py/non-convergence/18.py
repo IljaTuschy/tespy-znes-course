@@ -1,0 +1,25 @@
+"""
+Find the issue with the code below and fix it.
+"""
+
+from tespy.components import Source, Sink, SimpleHeatExchanger
+from tespy.connections import Connection
+from tespy.networks import Network
+
+nw = Network()
+
+source = Source("source")
+heater = SimpleHeatExchanger("heater")
+sink = Sink("sink")
+
+c1 = Connection(source, "out1", heater, "in1")
+c2 = Connection(heater, "out1", sink, "in1")
+
+nw.add_conns(c1, c2)
+
+c1.set_attr(fluid={"water": 1}, T=393.15, x=0, m=2)
+c2.set_attr(x=1)
+
+heater.set_attr(Q=1e5)
+
+nw.solve("design")

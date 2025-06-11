@@ -1,42 +1,29 @@
-# List of potential issues
-# FLUIDS
-# - non-specified fluid composition
-# - fluid just as string
-# - mass fraction of fluids not adding up to 1 or larger than 1
+"""
+Find the issue with the code below and fix it.
+"""
 
-from tespy.components import Source, Sink
+from tespy.components import Source, Sink, SimpleHeatExchanger
 from tespy.connections import Connection
 from tespy.networks import Network
 
-
 nw = Network()
 
-c1 = Connection(Source("test"), "out1", Sink("test2"), "in1")
+source = Source("source")
+heater = SimpleHeatExchanger("heater")
+sink = Sink("sink")
 
-nw.add_conns(c1)
+c1 = Connection(source, "out1", heater, "in1")
+c2 = Connection(heater, "out1", sink, "in1")
 
-# - c1.set_attr(m=1, p=1e5, T=293.15)
-# - c1.set_attr(m=1, p=1e5, T=293.15, fluid={"N2"})
-# - c1.set_attr(m=1, p=1e5, T=293.15, fluid="N2")
-# - c1.set_attr(m=1, p=1e5, T=293.15, fluid={"N2": 0.75, "O2": 0.30})
+nw.add_conns(c1, c2)
 
-# nw.solve("design")
+c1.set_attr(fluid={"water": 1}, T=393.15, x=0)
+c2.set_attr(T=393.15, x=1)
 
-# INCORRECT NUMBER OF SPECIFICATIONS
-from tespy.components import Merge
+heater.set_attr(pr=1)
 
-nw = Network()
+nw.solve("design")
 
-merge = Merge("merge")
-c1 = Connection(Source("test"), "out1", merge, "in1")
-c2 = Connection(Source("test2"), "out1", merge, "in2")
-c3 = Connection(merge, "out1", Sink("test3"), "in1")
-
-nw.add_conns(c1, c2, c3)
-
-# TOO MANY PARAMETERS
-# c1.set_attr(fluid={"water": 1}, p=1e5, T=293.15, m=10)
-# c2.set_attr(fluid={"water": 1}, m=5, T=293.15, p=1e5)
 # TOO FEW PARAMETERS
 # c1.set_attr(fluid={"water": 1}, T=293.15, m=10)
 # c2.set_attr(fluid={"water": 1}, m=5, T=293.15)
