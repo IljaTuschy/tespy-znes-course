@@ -24,40 +24,45 @@ from tespy.connections import Connection
 from tespy.components import(
     Source,
     Sink,
-    Pump,
+    Turbine,
     SimpleHeatExchanger,
-    Merge
+    Splitter
 )
 import numpy as np
 import matplotlib.pyplot as plt
 n = Network()
 a = Source('a')
-b = SimpleHeatExchanger('b')
-c = Merge('c')
-d = Sink('d')
-e = Source('e')
-f = Pump('f')
+b = Turbine('b')
+c = Splitter('c')
+d = Turbine('d')
+e = Sink('e')
+f = SimpleHeatExchanger('f')
+g = Sink('g')
 A = Connection(a, 'out1', b, 'in1', 'A')
 B = Connection(b, 'out1', c, 'in1', 'B')
 C = Connection(c, 'out1', d, 'in1', 'C')
-D = Connection(e, 'out1', f, 'in1', 'D')
-E = Connection(f, 'out1', c, 'in2', 'E')
-n.add_conns(A, B, C, D, E)
-A.set_attr(fluid={'water':1}, p=10e5, T=273.15+20)
-B.set_attr(x=0)
-D.set_attr(fluid={'water':1}, p=1e5, T=273.15+20)
-b.set_attr(pr=1)
-f.set_attr(eta_s=1)
-for x in (10, 20, 30, 40):
-    A.set_attr(m=x)
-    y = np.linspace(40, 100, 20)
-    r = np.empty([20])
-    i = 0
-    for z in y:
-        C.set_attr(T=273.15+z)
-        n.set_attr(iterinfo=False)
-        n.solve('design')
-        r[i]=f.get_attr('P').val
-        i += 1
-    plt.plot(y,r)
+D = Connection(d, 'out1', e, 'in1', 'D')
+E = Connection(c, 'out2', f, 'in1', 'E')
+F = Connection(f, 'out1', g, 'in1', 'F')
+n.add_conns(A, B, C, D, E, F)
+A.set_attr(fluid={'water':1}, m=10, p=100e5, T=273.15+500)
+D.set_attr(p=0.1e5)
+E.set_attr(m=5)
+F.set_attr(x=0)
+b.set_attr(eta_s=0.9)
+d.set_attr(eta_s=0.9)
+f.set_attr(pr=0.9)
+x = np.linspace(5,25, 21)
+y = np.empty([21])
+z = np.empty([21])
+i = 0
+for u in x:
+    B.set_attr(p=u*1e5)
+    n.set_attr(iterinfo=False)
+    n.solve('design')
+    y[i] = (-b.get_attr('P').val - d.get_attr('P').val)*1e-6
+    z[i] = -f.get_attr('Q').val*1e-6
+    i +=1
+plt.plot(x,y)
+plt.plot(x,z)
 plt.show()

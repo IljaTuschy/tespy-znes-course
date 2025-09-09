@@ -17,7 +17,7 @@ the code of the exercise.
 
 Your result needs to be 
 a) a commented python script as a file or text
-b) a file of any type holding the sketch
+b) a sketch of the heat balace diagram
 '''
 from tespy.networks import Network
 from tespy.connections import Connection
