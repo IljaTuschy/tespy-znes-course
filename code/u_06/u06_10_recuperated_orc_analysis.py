@@ -53,9 +53,9 @@ p_low = PSI("P", "T", 50 + 273.15, "Q", 1, working_fluid) / 1e5
 a2.set_attr(h0=140000)
 
 b1.set_attr(fluid={working_fluid: 1}, x=1, T=140)
-b3.set_attr(Td_bp=10, p0=p_low)
+b3.set_attr(td_dew=10)
 b4.set_attr(x=0)
-b7.set_attr(x=0, p0=p_high)
+b7.set_attr(x=0)
 
 c1.set_attr(fluid={"air": 1}, p=1, T=20)
 c2.set_attr(T=35)
@@ -69,7 +69,7 @@ pump.set_attr(eta_s=0.75)
 
 nw.solve("design")
 
-b3.set_attr(Td_bp=None)
+b3.set_attr(td_dew=None)
 recuperator.set_attr(eff_hot=0.5)
 
 nw.solve("design")

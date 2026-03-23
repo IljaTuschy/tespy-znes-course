@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from tespy.networks import Network
 from tespy.components import CycleCloser, Turbine, Pump, Source, Sink, HeatExchanger, MovingBoundaryHeatExchanger
 from tespy.connections import Connection
+from tespy.tools import get_plotting_data
 from CoolProp.CoolProp import PropsSI as PSI
 
 
@@ -53,9 +54,9 @@ p_low = PSI("P", "T", 50 + 273.15, "Q", 1, working_fluid) / 1e5
 a2.set_attr(h0=140000)
 
 b1.set_attr(fluid={working_fluid: 1}, x=1, T=140)
-b3.set_attr(Td_bp=10, p0=p_low)
+b3.set_attr(td_dew=10)
 b4.set_attr(x=0)
-b7.set_attr(x=0, p0=p_high)
+b7.set_attr(x=0)
 
 c1.set_attr(fluid={"air": 1}, p=1, T=20)
 c2.set_attr(T=35)
@@ -69,7 +70,7 @@ pump.set_attr(eta_s=0.75)
 
 nw.solve("design")
 
-b3.set_attr(Td_bp=None)
+b3.set_attr(td_dew=None)
 recuperator.set_attr(eff_hot=0.5)
 
 nw.solve("design")
@@ -85,31 +86,18 @@ fig, ax = plt.subplots(1)
 
 diagram.draw_isolines(fig, ax, "Ts", 0, 1750, 0, 200)
 
-processes = {}
-data = turbine.get_plotting_data()[1]
-processes["turbine"] = diagram.calc_individual_isoline(**data)
+processes, points = get_plotting_data(nw, "b1")
 
-data = condenser.get_plotting_data()[1]
-processes["condenser"] = diagram.calc_individual_isoline(**data)
+processes = {
+    key: diagram.calc_individual_isoline(**value)
+    for key, value in processes.items()
+    if value is not None
+}
 
-data = pump.get_plotting_data()[1]
-processes["pump"] = diagram.calc_individual_isoline(**data)
-
-data = preheater.get_plotting_data()[2]
-processes["preheater"] = diagram.calc_individual_isoline(**data)
-
-data = evaporator.get_plotting_data()[2]
-processes["evaporator"] = diagram.calc_individual_isoline(**data)
-
-data = recuperator.get_plotting_data()[1]
-processes["recuperator hot side"] = diagram.calc_individual_isoline(**data)
-
-data = recuperator.get_plotting_data()[2]
-processes["recuperator cold side"] = diagram.calc_individual_isoline(**data)
-
-for label, data in processes.items():
-    ax.plot(data["s"], data["T"], label=label)
-    ax.scatter(data["s"][0], data["T"][0])
+for label, values in processes.items():
+    _ = ax.plot(values["s"], values["T"], label=label)
+for label, point in points.items():
+    _ = ax.scatter(point["s"], point["T"], color="tab:red")
 
 ax.legend()
 plt.tight_layout()
