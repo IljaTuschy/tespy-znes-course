@@ -2,7 +2,7 @@
 script to simulate a
 extraction turbine chp in
 design mode
-belongs to 
+belongs to
 unit 08: Cycles III - CHP
 '''
 
@@ -18,11 +18,12 @@ from tespy.components import(
     Splitter,
     Merge,
     Valve,
-    CycleCloser    
+    CycleCloser
 )
 
 #create network
-chp = Network(p_unit='bar', T_unit='C')
+chp = Network()
+chp.units.set_defaults(pressure='bar', temperature='°C')
 
 #create components
 steg = SimpleHeatExchanger('steam generator')
@@ -91,5 +92,3 @@ chp.print_results()
 
 print(el_net.P.val)
 print(heco.get_attr('Q').val)
-
-

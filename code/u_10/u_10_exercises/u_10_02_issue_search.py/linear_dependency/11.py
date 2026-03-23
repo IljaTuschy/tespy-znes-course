@@ -39,7 +39,8 @@ nw.solve("design")
 
 # UNITS DO NOT MATCH
 
-nw = Network(T_unit="K", p_unit="bar")
+nw = Network()
+nw.units.set_defaults(temperature="K", pressure="bar")
 
 c1 = Connection(Source("test"), "out1", Sink("test2"), "in1")
 

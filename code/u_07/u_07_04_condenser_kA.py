@@ -3,7 +3,8 @@ from tespy.connections import Connection
 from tespy.networks import Network
 
 
-nw = Network(T_unit="C", p_unit="bar")
+nw = Network()
+nw.units.set_defaults(temperature="degC", pressure="bar")
 
 so_steam = Source("steam")
 si_cond = Sink("condensate")

@@ -15,7 +15,8 @@ from tespy.components import(
 )
 
 # create network and set unit system
-nw = Network(p_unit='bar', T_unit='C')
+nw = Network()
+nw.units.set_defaults(pressure='bar', temperature='°C')
 
 # create components
 tank = Source('water tank')

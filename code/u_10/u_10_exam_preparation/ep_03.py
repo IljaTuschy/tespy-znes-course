@@ -1,7 +1,7 @@
 '''
 script to calculate the performance of a
-closed cycle gas turbine 
-based on known 
+closed cycle gas turbine
+based on known
 component performance data
 
 Modify and use the model to determine the
@@ -21,7 +21,8 @@ from tespy.components import(
 )
 
 # create network and set unit system
-rccgt = Network(p_unit='bar', T_unit='C')
+rccgt = Network()
+rccgt.units.set_defaults(pressure='bar', temperature='°C')
 
 # create components without parametrization
 comp = Compressor('compressor')

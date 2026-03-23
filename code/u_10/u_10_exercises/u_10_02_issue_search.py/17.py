@@ -6,7 +6,8 @@ from tespy.components import Source, Sink, SimpleHeatExchanger
 from tespy.connections import Connection
 from tespy.networks import Network
 
-nw = Network(p_unit="bar", T_unit="C")
+nw = Network()
+nw.units.set_defaults(pressure="bar", temperature="°C")
 
 heater = SimpleHeatExchanger("heater")
 

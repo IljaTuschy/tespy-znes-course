@@ -1,7 +1,7 @@
 """
 This module calculates the
 mass flow needed to provide
-a defined power output of a 
+a defined power output of a
 steam turbine working between
 two steam lines
 
@@ -13,7 +13,8 @@ from tespy.connections import Connection
 from tespy.networks import Network
 
 # create network and set unit system
-nw = Network(T_unit="C", p_unit="bar")
+nw = Network()
+nw.units.set_defaults(temperature="degC", pressure="bar")
 
 # define topology
 source = Source("high pressure steam line")

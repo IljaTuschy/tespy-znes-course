@@ -3,7 +3,8 @@ from tespy.connections import Connection
 from tespy.networks import Network
 
 
-nw = Network(T_unit="C", p_unit="bar")
+nw = Network()
+nw.units.set_defaults(temperature="degC", pressure="bar")
 
 source_cw = Source("cooling water source")
 sink_cw = Sink("cooling water sink")

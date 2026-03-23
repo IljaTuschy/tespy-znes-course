@@ -4,7 +4,8 @@ from tespy.networks import Network
 from CoolProp.CoolProp import PropsSI
 
 
-nw = Network(T_unit="C", p_unit="bar")
+nw = Network()
+nw.units.set_defaults(temperature="degC", pressure="bar")
 
 ev = MovingBoundaryHeatExchanger("evaporator")
 cp = Compressor("compressor")

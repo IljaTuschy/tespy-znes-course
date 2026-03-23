@@ -12,7 +12,8 @@ from tespy.networks import Network
 from tespy.connections import Connection
 
 
-nw = Network(T_unit="C", p_unit="bar")
+nw = Network()
+nw.units.set_defaults(temperature="degC", pressure="bar")
 
 ambient_air = Source("ambient air")
 pressurized_air = Sink("pressurized air")

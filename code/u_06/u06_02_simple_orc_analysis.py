@@ -5,7 +5,8 @@ import numpy as np
 from CoolProp.CoolProp import PropsSI as PSI
 
 
-nw = Network(T_unit="C", p_unit="bar")
+nw = Network()
+nw.units.set_defaults(temperature="degC", pressure="bar")
 
 heat_source_in = Source("heat source inlet")
 heat_source_out = Sink("heat source outlet")

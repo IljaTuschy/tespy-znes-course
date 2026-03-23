@@ -1,10 +1,10 @@
 """
-Script to calculate the 
+Script to calculate the
 power of a compressor
 with known efficiency
 compressing air from ambient
 condition to a given
-pressure in a tank 
+pressure in a tank
 
 Find the issue with the code below and fix it.
 """
@@ -14,7 +14,8 @@ from tespy.connections import Connection
 from tespy.networks import Network
 
 # create network and define unit system
-nw = Network(p_unit='bar', T_unit='C')
+nw = Network()
+nw.units.set_defaults(pressure='bar', temperature='°C')
 
 # define topology
 # create components
@@ -37,5 +38,5 @@ c2.set_attr(p=10)
 # compressor efficiency
 comp.set_attr(eta_s=0.9)
 
-# simulate in design mode 
+# simulate in design mode
 nw.solve('design')

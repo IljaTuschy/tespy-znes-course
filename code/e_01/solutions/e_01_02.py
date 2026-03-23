@@ -1,6 +1,6 @@
 '''
-script to calculate the gross efficiency 
-of a steam power plant process with a 
+script to calculate the gross efficiency
+of a steam power plant process with a
 single feedwater preheater
 '''
 from tespy.networks import Network
@@ -18,7 +18,8 @@ from tespy.components import(
 import numpy as np
 
 # create network
-plant = Network(T_unit='C', p_unit='bar')
+plant = Network()
+plant.units.set_defaults(pressure="bar", temperature="°C")
 
 # create components w/o parametrization
 stg = SimpleHeatExchanger('steam generator')
@@ -65,7 +66,7 @@ c01.set_attr(fluid={'water':1}, T=520, p=80, m=100)
 c02.set_attr(p=5)
 c04.set_attr(p=0.1)
 c06.set_attr(x=0)
-# provide starting value for preheater in order to 
+# provide starting value for preheater in order to
 # make setup with ttd_u specification work
 c08.set_attr(h0=640000)
 
@@ -87,6 +88,3 @@ for p in p_range:
 
 print(etas)
 print(p_range)
-
-
-

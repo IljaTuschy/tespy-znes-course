@@ -3,7 +3,10 @@ from tespy.components import Source, Sink, MovingBoundaryHeatExchanger, Compress
 from tespy.connections import Connection
 from tespy.networks import Network
 import numpy as np
-import pygmo as pg
+import pandas as pd
+from pymoo.optimize import minimize
+from pymoo.algorithms.soo.nonconvex.de import DE  # https://pymoo.org/algorithms/index.html
+
 
 
 class HeatPump:
@@ -13,7 +16,8 @@ class HeatPump:
 
     def _create_network(self):
 
-        nw = Network(T_unit="C", p_unit="bar")
+        nw = Network()
+        nw.units.set_defaults(temperature="degC", pressure="bar")
 
         so_air = Source("air inlet")
         si_air = Sink("air outlet")
@@ -83,6 +87,7 @@ class HeatPump:
         condenser.set_attr(td_pinch=10)
 
         nw.solve("design")
+        nw.set_attr(iterinfo=False)
         self.nw = nw
 
     def get_param(self, obj, label, parameter):
@@ -178,7 +183,7 @@ class HeatPump:
                     ["condenser", "compressor lower cycle", "compressor higher cycle"]
                 )
                 cop = abs(condenser.Q.val) / (compressor_low.P.val + compressor_high.P.val)
-                return 1 / cop
+                return cop
             else:
                 msg = f"Objective {objective} not implemented."
                 raise NotImplementedError(msg)
@@ -198,19 +203,23 @@ variables = {
 }
 
 optimize = OptimizationProblem(
-    plant, variables, objective=["cop"]
+    plant, variables, objective=["cop"], minimize=[False]
 )
 
 num_ind = 5
 num_gen = 2
 
-# for algorithm selection and parametrization please consider the pygmo
-# documentation! The number of generations indicated in the algorithm is
+# for algorithm selection and parametrization please consider the pymoo
+# documentation. The number of generations indicated in the algorithm is
 # the number of evolutions we undertake within each generation defined in
 # num_gen
-algo = pg.algorithm(pg.ihs(gen=3, seed=42))
-# create starting population
-pop = pg.population(pg.problem(optimize), size=num_ind, seed=42)
+algorithm = DE(pop_size=num_ind)
 
-optimize.run(algo, pop, num_ind, num_gen)
-print(optimize.individuals)
+res = minimize(
+    optimize,
+    algorithm,
+    termination=('n_gen', num_gen)
+)
+
+result = pd.DataFrame(optimize.log)
+print(result)

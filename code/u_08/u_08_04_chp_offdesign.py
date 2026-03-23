@@ -1,9 +1,9 @@
 '''
 script to simulate a
-extraction turbine chp 
+extraction turbine chp
 with two-sided heating condenser in
 design mode
-belongs to 
+belongs to
 unit 08: Cycles III - CHP
 '''
 
@@ -23,7 +23,8 @@ from tespy.components import(
 )
 
 #create network
-chp = Network(p_unit='bar', T_unit='C')
+chp = Network()
+chp.units.set_defaults(pressure='bar', temperature='°C')
 
 #create components
 steg = SimpleHeatExchanger('steam generator')

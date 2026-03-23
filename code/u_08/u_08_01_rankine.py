@@ -1,9 +1,9 @@
 '''
 scipt to clacluate a simple
-rankine cycle with 
+rankine cycle with
 given output using
 bus component
-belongs to 
+belongs to
 unit 08: Cycles III
 '''
 
@@ -16,11 +16,12 @@ from tespy.components import(
     Turbine,
     Condenser,
     Pump,
-    CycleCloser    
+    CycleCloser
 )
 
 #create network
-pp = Network(p_unit='bar', T_unit='C')
+pp = Network()
+pp.units.set_defaults(pressure='bar', temperature='°C')
 
 #create components
 steg = SimpleHeatExchanger('steam generator')

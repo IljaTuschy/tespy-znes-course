@@ -3,7 +3,8 @@ from tespy.connections import Connection
 from tespy.networks import Network
 
 
-nw = Network(T_unit="C", p_unit="bar")
+nw = Network()
+nw.units.set_defaults(temperature="degC", pressure="bar")
 
 so_air = Source("air inlet")
 si_air = Sink("air outlet")
@@ -76,23 +77,26 @@ nw.solve("design")
 nw.print_results()
 
 cop = abs(condenser.Q.val) / (compressor_low.P.val + compressor_high.P.val)
+nw.set_attr(iterinfo=False)
 print(cop)
 
 
-def calc_cop_T(T, *args):
+def calc_cop_T(x, *args):
     b3, condenser, compressor_low, compressor_high, nw = args
-    b3.set_attr(T=T)
+    # x is a vector
+    b3.set_attr(T=x[0])
     nw.solve("design")
     cop = abs(condenser.Q.val) / (compressor_low.P.val + compressor_high.P.val)
     return 1 / cop
 
 
-from scipy.optimize import fmin_powell
+from scipy.optimize import minimize
 
 
-result = fmin_powell(
+result = minimize(
     calc_cop_T,
     x0=60,
     args=(b3, condenser, compressor_low, compressor_high, nw)
 )
-print(result)
+print(f"Maximum COP = {1 / result['fun']}")
+print(f"Corresponding temperature = {result['x'][0]}")
