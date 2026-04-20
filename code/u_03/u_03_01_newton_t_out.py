@@ -52,4 +52,4 @@ while True:
     if abs(residual) < 1e-6:
         break
 
-pr_guess
+print(pr_guess)

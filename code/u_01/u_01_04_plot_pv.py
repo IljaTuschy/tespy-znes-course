@@ -44,7 +44,7 @@ for v_t in v_range:
     plt.plot(v_t, p_range)
 
 #Format axes
-plt.xlabel('Volume in $\mathrm{m}^3$')
+plt.xlabel(r'Volume in $\mathrm{m}^3$')
 plt.ylabel('Pressure in Pa')
 plt.axis([0, 10, 0, p_max])
 
